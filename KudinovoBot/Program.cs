@@ -1,5 +1,6 @@
 ﻿using KudinovoBot.BLL.Telegram.Services;
 using KudinovoBot.DAL.Configs;
+using KudinovoBot.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PRTelegramBot.Core;
@@ -22,6 +23,8 @@ namespace KudinovoBot
             _service = new ServiceCollection()
                  .AddBotHandlers()
                  .AddSingleton(_config)
+                 /// Repositories
+                 .AddSingleton<WorkRepository>()
                  .BuildServiceProvider();
 
             _client = new PRBot(options =>
