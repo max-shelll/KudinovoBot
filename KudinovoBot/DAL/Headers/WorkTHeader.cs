@@ -7,6 +7,8 @@ namespace KudinovoBot.DAL.Headers
     {
         PreviousPage,
         Create,
+        Edit,
+        Remove,
         NextPage
     }
 }

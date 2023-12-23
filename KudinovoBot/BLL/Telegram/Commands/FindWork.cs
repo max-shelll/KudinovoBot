@@ -1,5 +1,8 @@
 ﻿using KudinovoBot.DAL.Headers;
+using KudinovoBot.DAL.Repositories;
+using MongoDB.Driver.Core.WireProtocol.Messages;
 using PRTelegramBot.Attributes;
+using PRTelegramBot.Extensions;
 using PRTelegramBot.Helpers.TG;
 using PRTelegramBot.Models;
 using PRTelegramBot.Models.Enums;
@@ -14,11 +17,28 @@ namespace KudinovoBot.BLL.Telegram.Commands
 {
     public class FindWork
     {
+        private readonly WorkRepository _workRepo;
+
+        public FindWork(WorkRepository workRepo)
+        {
+            _workRepo = workRepo;
+        }
+
         [ReplyMenuHandler("работа в кудиново")]
         public async Task Execute(ITelegramBotClient client, Update update)
         {
             var message = update.Message;
-            string msg = "🔎 Добро пожаловать в сервис по поиску работы.";
+            var works = await _workRepo.GetAllAsync();
+
+            string msg = "";
+            if (works.Count == 0)
+            {
+                msg = "К сожалению, мы не нашли актуальных вакансий 🔎";
+            }
+            else
+            {
+                msg = works.First().Text;
+            }
 
             var options = new OptionMessage()
             {

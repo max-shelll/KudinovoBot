@@ -18,7 +18,7 @@ using PRTelegramBot.Helpers;
 using PRTelegramBot.Helpers.TG;
 using PRTelegramBot.Models.Interface;
 
-namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.Work
+namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 {
     public class WorkPageManagerButton
     {
