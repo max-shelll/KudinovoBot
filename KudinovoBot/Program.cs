@@ -1,10 +1,14 @@
-﻿using KudinovoBot.BLL.Telegram.Services;
+﻿using KudinovoBot.BLL.Telegram.Handlers;
+using KudinovoBot.BLL.Telegram.Services;
 using KudinovoBot.DAL.Configs;
 using KudinovoBot.DAL.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using PRTelegramBot.Core;
 using PRTelegramBot.Extensions;
+using Telegram.Bot;
+using Telegram.Bot.Types;
+using File = System.IO.File;
 
 namespace KudinovoBot
 {
@@ -40,14 +44,24 @@ namespace KudinovoBot
         static void Main(string[] args)
             => new Program().RunAsync().GetAwaiter().GetResult();
 
-        public async Task RunAsync()
+        private async Task RunAsync()
         {
             _client.OnLogError += LoggerService.LogErrorAsync;
             _client.OnLogCommon += LoggerService.LogCommonAsync;
 
-            await _client.Start();
+            HandlerInts();
+
+            await _client.Start();;
 
             await Task.Delay(Timeout.Infinite);
+        }
+
+        private void HandlerInts()
+        {
+            if (_client == null)
+                return;
+
+            _client.Handler.Router.OnMissingCommand += MissingCommandHandler.Execute;
         }
     }
 }

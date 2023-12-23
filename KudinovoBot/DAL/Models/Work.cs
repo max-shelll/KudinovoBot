@@ -6,6 +6,6 @@
 
         public string Text { get; set; }
 
-        public long AuthorId { get; set; }
+        public (long, string) Author { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace KudinovoBot.DAL.Repositories
         public async Task<Work> GetByAuthorId(long id)
         {
             var collection = ConnectToMongo<Work>(_collectionName);
-            return await collection.Find(i => i.AuthorId == id).FirstOrDefaultAsync();
+            return await collection.Find(i => i.Author.Item1 == id).FirstOrDefaultAsync();
         }
 
         public async Task<List<Work>> GetAllAsync()

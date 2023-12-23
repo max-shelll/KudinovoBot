@@ -16,7 +16,6 @@ namespace KudinovoBot.BLL.Telegram.Commands
             Привет, {message.From.FirstName}! На связи бот Кудя 👋
             """;
 
-
             await Message.Send(botClient: client, update: update, msg: msg);
         }
     }
