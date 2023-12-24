@@ -17,6 +17,7 @@ using PRTelegramBot.Models;
 using PRTelegramBot.Helpers;
 using PRTelegramBot.Helpers.TG;
 using PRTelegramBot.Models.Interface;
+using MongoDB.Driver;
 
 namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 {
@@ -29,13 +30,20 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             _workRepo = workRepo;
         }
 
-        [InlineCallbackHandler<WorkTHeader>(WorkTHeader.PreviousPage, WorkTHeader.NextPage)]
-        public async Task PreviousPage(ITelegramBotClient botClient, Update update)
+        [InlineCallbackHandler<WorkHeader>(WorkHeader.PreviousPage, WorkHeader.NextPage)]
+        public async Task ChangePage(ITelegramBotClient botClient, Update update)
         {
             var command = InlineCallback<PageTCommand>.GetCommandByCallbackOrNull(update.CallbackQuery.Data);
-            var header = (WorkTHeader)command.Data.Header;
+            var header = (WorkHeader)command.Data.Header;
 
             var works = (await _workRepo.GetAllAsync()).Select(w => w.Text).ToList();
+
+            if (works.Count() <= 0)
+            {
+                await Message.NotifyFromCallBack(botClient, update.CallbackQuery.Id, "К сожалению, мы не нашли актуальных вакансий 🔎");
+                return;
+            }
+
             string msg = GetMessage(works, command.Data.Page, out bool reachedLastPage);
 
             var buttons = GetInlineButtons(command.Data.Page, works.Count, reachedLastPage);
@@ -69,24 +77,24 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 
         private List<IInlineContent> GetInlineButtons(int page, int worksCount, bool reachedLastPage)
         {
-            var backButton = (page > 0) ? new InlineCallback<PageTCommand>("⬅️", WorkTHeader.PreviousPage, new PageTCommand(page - 1, WorkTHeader.PreviousPage))
+            var backButton = (page > 0) ? new InlineCallback<PageTCommand>("⬅️", WorkHeader.PreviousPage, new PageTCommand(page - 1, WorkHeader.PreviousPage))
                 : null;
 
-            var createButton = new InlineCallback("Создать объявление", WorkTHeader.Create);
+            var createButton = new InlineCallback("Создать объявление", WorkHeader.Create);
 
-            var nextButton = (page < worksCount) ? new InlineCallback<PageTCommand>("➡️", WorkTHeader.NextPage, new PageTCommand(page + 1, WorkTHeader.NextPage))
+            var nextButton = (page < worksCount) ? new InlineCallback<PageTCommand>("Другие вакансии", WorkHeader.NextPage, new PageTCommand(page + 1, WorkHeader.NextPage))
                 : null;
 
             return new List<IInlineContent> { backButton, createButton, nextButton }.Where(b => b != null).Select(b => b!).ToList();
         }
 
-        private void UpdatePageNumber(WorkTHeader header, PageTCommand commandData, bool reachedLastPage)
+        private void UpdatePageNumber(WorkHeader header, PageTCommand commandData, bool reachedLastPage)
         {
-            if (header == WorkTHeader.PreviousPage)
+            if (header == WorkHeader.PreviousPage)
             {
                 commandData.Page -= 1;
             }
-            else if (header == WorkTHeader.NextPage && !reachedLastPage)
+            else if (header == WorkHeader.NextPage && !reachedLastPage)
             {
                 commandData.Page += 1;
             }

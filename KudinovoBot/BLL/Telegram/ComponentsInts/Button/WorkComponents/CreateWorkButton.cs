@@ -28,7 +28,7 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             _config = config;
         }
 
-        [InlineCallbackHandler<WorkTHeader>(WorkTHeader.Create)]
+        [InlineCallbackHandler<WorkHeader>(WorkHeader.Create)]
         public async Task Execute(ITelegramBotClient botClient, Update update)
         {
             var command = InlineCallback.GetCommandByCallbackOrNull(update.CallbackQuery.Data);
@@ -70,8 +70,8 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             {
                 MenuInlineKeyboardMarkup = MenuGenerator.InlineKeyboard(2, new()
                 {
-                    new InlineCallback<WorkTCommand>("Редактировать", WorkTHeader.Edit, new WorkTCommand(work.Id)),
-                    new InlineCallback<WorkTCommand>("Удалить", WorkTHeader.Remove, new WorkTCommand(work.Id)),
+                    new InlineCallback<WorkTCommand>("Редактировать", WorkHeader.Edit, new WorkTCommand(work.Id)),
+                    new InlineCallback<WorkTCommand>("Удалить", WorkHeader.Remove, new WorkTCommand(work.Id)),
                 }),
             };
 
@@ -88,8 +88,8 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             {
                 MenuInlineKeyboardMarkup = MenuGenerator.InlineKeyboard(2, new()
                 {
-                    new InlineCallback<WorkTCommand>("Редактировать", WorkTHeader.Edit, new WorkTCommand(work.Id)),
-                    new InlineCallback<WorkTCommand>("Удалить", WorkTHeader.Remove, new WorkTCommand(work.Id)),
+                    new InlineCallback<WorkTCommand>("Редактировать", WorkHeader.Edit, new WorkTCommand(work.Id)),
+                    new InlineCallback<WorkTCommand>("Удалить", WorkHeader.Remove, new WorkTCommand(work.Id)),
                 }),
             };
             await Message.Send(botClient: botClient, chatId: _config.OwnerId, msg: msg, option: options);

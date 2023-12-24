@@ -24,7 +24,7 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             _workRepo = workRepo;
         }
 
-        [InlineCallbackHandler<WorkTHeader>(WorkTHeader.Remove)]
+        [InlineCallbackHandler<WorkHeader>(WorkHeader.Remove)]
         public async Task Execute(ITelegramBotClient botClient, Update update)
         {
             var command = InlineCallback<WorkTCommand>.GetCommandByCallbackOrNull(update.CallbackQuery.Data);

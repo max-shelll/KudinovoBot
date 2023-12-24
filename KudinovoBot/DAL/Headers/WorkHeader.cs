@@ -3,7 +3,7 @@
 namespace KudinovoBot.DAL.Headers
 {
     [InlineCommand]
-    public enum WorkTHeader
+    public enum WorkHeader
     {
         PreviousPage,
         Create,
