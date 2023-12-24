@@ -50,16 +50,11 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
         {
             var message = update.Message;
 
-            string msg = $"Вы создали новый пост:\n {message.Text}\n @{message.From.Username} ©";
+            string msg = $"Вы создали новый пост:\n{message.Text}\n@{message.From.Username} ©";
 
             var work = new Work()
             {
-                Text =
-                $"""
-                {message.Text}
-
-                @{message.From.Username} ©
-                """,
+                Text = $"{message.Text}\n@{message.From.Username} ©",
                 Author = (message.From.Id, message.From.Username)
             };
             await _workRepo.CreateAsync(work);
@@ -82,7 +77,7 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 
         private async Task SendToOwner(ITelegramBotClient botClient, Work work)
         {
-            string msg = $"Создан новый пост:\n {work.Text}";
+            string msg = $"Создан новый пост:\n{work.Text}";
 
             var options = new OptionMessage()
             {

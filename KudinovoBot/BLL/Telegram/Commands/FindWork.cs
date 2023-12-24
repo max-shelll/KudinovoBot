@@ -44,8 +44,8 @@ namespace KudinovoBot.BLL.Telegram.Commands
             {
                 MenuInlineKeyboardMarkup = MenuGenerator.InlineKeyboard(3, new()
                 {
-                    new InlineCallback<PageTCommand>("Другие вакансии", WorkHeader.NextPage, new PageTCommand(0, WorkHeader.NextPage)),
                     new InlineCallback("Создать объявление", WorkHeader.Create),
+                    new InlineCallback<PageTCommand>("Другие вакансии", WorkHeader.NextPage, new PageTCommand(0, WorkHeader.NextPage)),
                 }),
             };
 

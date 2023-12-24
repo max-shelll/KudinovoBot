@@ -14,6 +14,7 @@ using KudinovoBot.DAL.TCommand;
 using PRTelegramBot.Models.TCommands;
 using KudinovoBot.DAL.Parameters;
 using KudinovoBot.DAL.Configs;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 {
@@ -47,15 +48,10 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
             var message = update.Message;
             var data = args as WorkParameters;
 
-            string msg = $"Вы обновили пост:\n {message.Text}\n @{message.From.Username} ©";
+            string msg = $"Вы обновили пост:\n{message.Text}\n@{message.From.Username} ©";
 
             var workDb = await _workRepo.GetById(data.WorkId);
-            workDb.Text =
-            $"""
-            {message.Text}
-                
-            @{message.From.Username} ©
-            """;
+            workDb.Text = $"{message.Text}\n@{message.From.Username} ©";
 
             await _workRepo.UpdateAsync(workDb);
 
@@ -77,7 +73,7 @@ namespace KudinovoBot.BLL.Telegram.ComponentsInts.Button.WorkComponents
 
         private async Task SendToOwner(ITelegramBotClient botClient, Work work)
         {
-            string msg = $"Был обновлен пост:\n {work.Text}";
+            string msg = $"Был обновлен пост:\n{work.Text}";
 
             var options = new OptionMessage()
             {
